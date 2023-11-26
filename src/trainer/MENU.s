@@ -43,7 +43,7 @@ set_all_flags:
 waitkey:
 	lda hw_KEYBOARD
 	bpl waitkey
-	bit hw_STROBE
+	stz hw_KEYBOARD
 
 	cmp #'A'
 	beq all

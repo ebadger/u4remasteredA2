@@ -29,7 +29,8 @@ hw_LCBANK1  = $c08b
 drive_motor_off = $c088
 drive_motor_on  = $c089
 
-rom_SHADOW      = $f000
+rom_SHADOW_FXXX = $f000
+rom_SHADOW_EXXX = $e000
 rom_signature   = $fbb3
 rom_ZIDBYTE     = $fbc0
 rom_HOME        = $fc58

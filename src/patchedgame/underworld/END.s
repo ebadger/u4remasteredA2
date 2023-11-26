@@ -440,7 +440,7 @@ return_to_world:
 	.byte $84, "BLOAD ULT4,A$4000", $8d
 	.byte 0
 	lda #disk_britannia
-	jsr j_request_disk
+	jsr j_switch_directory
 	pla
 	tay
 	lda world_location_y,y

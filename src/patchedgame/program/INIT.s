@@ -53,10 +53,11 @@ cout_stub = $1fff
 	.byte $8d
 	.byte $8d
 	.byte "  COPYRIGHT 1985, ORIGIN SYSTEMS, INC.", $8d
+	.byte "  PORTED TO 3R1C 2023.", $8d
 	.byte 0
 	jsr print_cout
-	.byte $84, "BLOAD SEL,A$320", $8d
-	.byte $84, "BLOAD SUBS", $8d
+	.byte $84, "BLOAD SEL,A$0320", $8d
+	.byte $84, "BLOAD SUBS,A$0800", $8d
 	.byte 0
 
 	lda #disk_program
@@ -89,14 +90,28 @@ cout_stub = $1fff
 	sta zp_CSWL + 1
 	jsr DOS_hook_cout
 
-; copy hi 4K of ROM to underlying RAM
+; copy $F000 to $FFFF to RAM
 	bit hw_ROMIN ;read twice to
 	bit hw_ROMIN ;write-enable LC RAM bank2 ("Language Card")
 	lda #$00
 	sta key_buf_len
-	ldy #<rom_SHADOW
+	ldy #<rom_SHADOW_FXXX
 	sty ptr1
-	lda #>rom_SHADOW
+	lda #>rom_SHADOW_FXXX
+	sta ptr1 + 1
+:	lda (ptr1),y
+	sta (ptr1),y
+	iny
+	bne :-
+	inc ptr1 + 1
+	bne :-
+
+; copy $E000 to $EFFF to RAM
+	lda #$00
+	sta key_buf_len
+	ldy #<rom_SHADOW_EXXX
+	sty ptr1
+	lda #>rom_SHADOW_EXXX
 	sta ptr1 + 1
 :	lda (ptr1),y
 	sta (ptr1),y
@@ -117,13 +132,13 @@ cout_stub = $1fff
 	bit hw_LCBANK1 ;read twice to
 	bit hw_LCBANK1 ;RW-enable LC RAM bank1
 	jsr j_primm_cout
-	.byte $84,"BLOAD SHP0", $8d
+	.byte $84,"BLOAD SHP0,A$D000", $8d
 	.byte 0
 	bit hw_LCBANK2 ;read twice to RW-enable LC RAM bank2
 	jsr j_primm_cout
-	.byte $84,"BLOAD SHP1", $8d
-	.byte $84,"BLOAD TBLS,A$E000", $8d
-	.byte $84,"BLOAD HTXT,A$E400", $8d
+	.byte $84,"BLOAD SHP1,A$D000", $8d
+	.byte $84,"BLOAD TBLS,A$B000", $8d
+	.byte $84,"BLOAD HTXT,A$B400", $8d
 	.byte 0
 
 	lda hw_KEYBOARD

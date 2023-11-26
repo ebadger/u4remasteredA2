@@ -130,14 +130,14 @@ game_init:
 	lda #aura_none
 	sta magic_aura
 	lda #disk_britannia
-	jsr j_request_disk
+	jsr j_switch_directory
 	lda party_size
 	beq load_saved_game
 	jmp game_start
 
 load_saved_game:
 	jsr j_primm_cout
-	.byte $84,"BLOAD PRTY,A$0", $8d
+	.byte $84,"BLOAD PRTY,A$0000", $8d
 	.byte 0
 	lda party_size
 	bne load_saved_map
@@ -150,8 +150,8 @@ halt:
 
 load_saved_map:
 	jsr j_primm_cout
-	.byte $84,"BLOAD LIST,A$EE00", $8d
-	.byte $84,"BLOAD ROST,A$EC00", $8d
+	.byte $84,"BLOAD LIST,A$BE00", $8d
+	.byte $84,"BLOAD ROST,A$BC00", $8d
 	.byte 0
 
 game_start:
@@ -940,13 +940,13 @@ leave_to_world:
 	jsr j_primm
 	.byte "LEAVING...", $8d
 	.byte 0
-	bit hw_STROBE
+	stz hw_KEYBOARD
 	lda #mode_suspended
 	sta game_mode
 	lda #disk_britannia
-	jsr j_request_disk
+	jsr j_switch_directory
 	jsr j_primm_cout
-	.byte $84,"BLOAD TLST", $8d
+	.byte $84,"BLOAD TLST,A$BE00", $8d
 	.byte 0
 	lda britannia_x
 	sta player_xpos
@@ -2361,7 +2361,7 @@ load_dungeon:
 	lda #music_off
 	jsr music_ctl
 	lda #disk_dungeon
-	jsr j_request_disk
+	jsr j_switch_directory
 	jsr j_primm_cout
 	.byte $84,"BLOAD DNGD,A$8C00", $8d
 	.byte 0
@@ -2507,7 +2507,7 @@ print_location_name:
 
 file_write_temp_map:
 	lda #disk_britannia
-	jsr j_request_disk
+	jsr j_switch_directory
 	jsr j_primm_cout
 	.byte $84,"BSAVE TLST,A$EE00,L$100", $8d
 	.byte 0
@@ -2516,7 +2516,7 @@ file_write_temp_map:
 load_towne:
 	jsr file_write_temp_map
 	lda #disk_towne
-	jsr j_request_disk
+	jsr j_switch_directory
 	lda current_location
 	clc
 	adc #char_at_sign
@@ -3218,14 +3218,14 @@ cmd_quit:
 :	lda #music_off
 	jsr music_ctl
 	lda #disk_britannia
-	jsr j_request_disk
+	jsr j_switch_directory
 	jsr j_primm_cout
 	.byte $84,"BSAVE LIST,A$EE00,L$100", $8d
 	.byte $84,"BSAVE ROST,A$EC00,L$200", $8d
 	.byte $84,"BSAVE PRTY,A$0,L$20", $8d
 	.byte 0
 	lda zp_save_reg1    ;ENHANCEMENT: allow save in dungeon
-	jsr j_request_disk  ;ENHANCEMENT
+	jsr j_switch_directory  ;ENHANCEMENT
 	lda #music_adventure
 	jsr music_ctl
 	jmp cmd_done
@@ -3468,7 +3468,7 @@ no_response:
 	cmp #tile_lord_british
 	bne @talk_non_british
 	lda #disk_britannia
-	jsr j_request_disk
+	jsr j_switch_directory
 	jsr j_primm_cout
 	.byte $84,"BLOAD LORD,A$8800", $8d
 	.byte 0
@@ -3478,7 +3478,7 @@ no_response:
 	lda #music_off
 	jsr music_ctl
 	lda #disk_towne
-	jsr j_request_disk
+	jsr j_switch_directory
 	lda #music_Castles
 	jsr music_ctl
 	jmp @end_talk
@@ -6346,7 +6346,7 @@ begin_combat:
 	lda #music_combat
 	jsr music_ctl
 	jsr j_active_char_combat_start  ; ENHANCEMENT
-	bit hw_STROBE
+	stz hw_KEYBOARD
 	lda #$00
 	sta key_buf_len
 start_players_turn:
@@ -8887,7 +8887,7 @@ run_file_dead:
 	lda #music_off
 	jsr music_ctl
 	lda #disk_britannia
-	jsr j_request_disk
+	jsr j_switch_directory
 	jsr j_primm_cout
 	.byte $84,"BLOAD SAVE,A$8800", $8d
 	.byte 0

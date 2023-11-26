@@ -20,8 +20,8 @@
 ; Placeholder operands that get altered
 ; by self-modifying code.
 
-TMP_PAGE = $ff00
-TMP_ADDR = $ffff
+TMP_PAGE = $c800
+TMP_ADDR = $c8ff
 
 
 ; --- Custom use of Zero Page
@@ -104,7 +104,7 @@ j_drawhoriz:
 
 j_request_disk:
 	jmp request_disk
-
+	
 j_update_status:
 	jmp update_status
 
@@ -192,6 +192,9 @@ j_gettile_dungeon:
 ;SIZE_OPT: exposed for ULT4 to re-use instead of having its own duplicate
 j_math_sign:
 	jmp getsign
+
+j_switch_directory:
+	jmp switch_directory
 
 move_east:
 	inc player_xpos
@@ -1977,7 +1980,7 @@ scankey:
 	bcs @done
 	sta key_buf,y
 	inc key_buf_len
-	bit hw_STROBE
+	stz hw_KEYBOARD
 @done:
 	rts
 
@@ -2332,90 +2335,133 @@ moongate_xtab:
 moongate_ytab:
 	.byte $85,$66,$e0,$25,$13,$c2,$7e,$a7
 
-request_disk:
+switch_directory:
+	; 2 == britannia
+	; 1 == towne
+	; 0 == underworld
+
 	sta reqdisk
-@request:
-	lda reqdisk
-	cmp #$02
-	beq @twodrives
-	cmp #$04
-	beq @twodrives
-@onedrive:
-	lda #$01
-	sta currdrive
-	lda reqdisk
-	cmp currdisk_drive1
-	beq @checkdisk
-@askchange:
-	jsr primm
-	.byte $8d
-	.byte "PLEASE PLACE THE", $8d
-	.byte 0
-	jsr askdisk
-	jsr primm
-	.byte " DISK", $8d
-	.byte "INTO DRIVE ", 0
-	lda currdrive
-	jsr printdigit
-	jsr primm
-	.byte $8d
-	.byte "AND PRESS [ESC]", $8d
-	.byte 0
-@wait:
-	jsr waitkey
-	cmp #char_ESC
-	bne @wait
-	beq @checkdisk
-@twodrives:
-	lda numdrives
-	cmp #$02
-	bcc @onedrive
-	lda #$02
-	sta currdrive
-	lda reqdisk
-	cmp currdisk_drive2
-	beq @checkdisk
-	bne @askchange
-@checkdisk:
-	lda currdrive
-	clc
-	adc #char_num_first
-	sta @file_char_drive
-	jsr primm_cout
-	.byte $84, "BLOADDISK,D"
-@file_char_drive:
-	.byte "1", $8d
-	.byte 0
-	ldx currdrive
-	lda disk_id
-	sta numdrives,x
-	cmp reqdisk
-	beq @done
-	jmp @request
-
-@done:
-	rts
-
-askdisk:
-	ldx reqdisk
-	dex
-	dex
-	bne @towne
-	jsr primm
-	.byte "BRITANNIA", 0
-	rts
-
-@towne:
-	dex
-	bne @underworld
-	jsr primm
-	.byte "TOWNE", 0
+	beq @underworld
+	dec reqdisk
+	beq @towne
+	dec reqdisk
+	beq @britannia
 	rts
 
 @underworld:
-	jsr primm
-	.byte "UNDERWORLD", 0
+	jsr j_primm_cout
+	.byte $84,"CD ..", $8d
+	.byte 0
+
+	jsr j_primm_cout
+	.byte $84,"CD UWORLD", $8d
+	.byte 0
 	rts
+
+@towne:
+	jsr j_primm_cout
+	.byte $84,"CD ..", $8d
+	.byte 0
+
+	jsr j_primm_cout
+	.byte $84,"CD TOWNE", $8d
+	.byte 0
+	rts
+
+@britannia:
+	jsr j_primm_cout
+	.byte $84,"CD ..", $8d
+	.byte 0
+
+	jsr j_primm_cout
+	.byte $84,"CD BRITANIA", $8d
+	.byte 0
+	rts
+
+request_disk:
+;	sta reqdisk
+;@request:
+;	lda reqdisk
+;	cmp #$02
+;	beq @twodrives
+;	cmp #$04
+;	beq @twodrives
+;@onedrive:
+;	lda #$01
+;	sta currdrive
+;	lda reqdisk
+;	cmp currdisk_drive1
+;	beq @checkdisk
+;@askchange:
+;	jsr primm
+;	.byte $8d
+;	.byte "PLEASE PLACE THE", $8d
+;	.byte 0
+;	jsr askdisk
+;	jsr primm
+;	.byte " DISK", $8d
+;	.byte "INTO DRIVE ", 0
+;	lda currdrive
+;	jsr printdigit
+;	jsr primm
+;	.byte $8d
+;	.byte "AND PRESS [ESC]", $8d
+;	.byte 0
+;@wait:
+;	jsr waitkey
+;	cmp #char_ESC
+;	bne @wait
+;	beq @checkdisk
+;@twodrives:
+;	lda numdrives
+;	cmp #$02
+;	bcc @onedrive
+;	lda #$02
+;	sta currdrive
+;	lda reqdisk
+;	cmp currdisk_drive2
+;	beq @checkdisk
+;	bne @askchange
+;@checkdisk:
+;	lda currdrive
+;	clc
+;	adc #char_num_first
+;	sta @file_char_drive
+;	jsr primm_cout
+;	.byte $84, "BLOAD DISK,D"
+;@file_char_drive:
+;	.byte "1", $8d
+;	.byte 0
+;	ldx currdrive
+;	lda disk_id
+;	sta numdrives,x
+;	cmp reqdisk
+;	beq @done
+;	jmp @request
+
+;@done:
+	rts
+
+;askdisk:
+;	ldx reqdisk
+;	dex
+;	dex
+;	bne @towne
+;	jsr primm
+;	.byte "BRITANNIA", 0
+;	rts
+
+;@towne:
+;	dex
+;	bne @underworld
+;	jsr primm
+;	.byte "TOWNE", 0
+;	rts
+
+;@underworld:
+;	jsr primm
+;	.byte "UNDERWORLD", 0
+;	rts
 
 playsfx:
 	asl

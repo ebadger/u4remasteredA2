@@ -22,7 +22,7 @@ zp_mp_class = $d8
 
 .assert * = j_overlay_entry, error, "Wrong start address"
 	jsr j_primm_cout
-	.byte $84,"BLOAD CAMP,A$240", $8d
+	.byte $84,"BLOAD CAMP,A$0240", $8d
 	.byte 0
 	lda #$00
 	tax
@@ -85,7 +85,7 @@ zp_mp_class = $d8
 :	dec curr_player
 	bne @next_player
 	jsr j_primm_cout
-	.byte $84,"BLOAD CAMP,A$240", $8d
+	.byte $84,"BLOAD CAMP,A$0240", $8d
 	.byte 0
 	pla
 	pla

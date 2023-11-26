@@ -53,7 +53,7 @@ status_Sleep = 'S'
 
 ; --- ADDRESSES
 
-party_stats = $ed00
+party_stats = $bd00
 
 virtue_honesty      = $00
 virtue_compassion   = $01
@@ -71,26 +71,26 @@ spells_max = $1a
 
 party_items = party_stats + virtue_last
 
-torches          = $ed08
-gems             = $ed09
-keys             = $ed0a
-sextant          = $ed0b
-stones           = $ed0c
-runes            = $ed0d
-bell_book_candle = $ed0e
-threepartkey     = $ed0f
-food_hi          = $ed10  ; Only 4 digits of food
-food_lo          = $ed11  ; are displayed, although
-food_frac        = $ed12  ; 6 digits are tracked.
-gold_hi          = $ed13
-gold_lo          = $ed14
-horn             = $ed15
-wheel            = $ed16
-skull            = $ed17
-armour           = $ed18
-weapons          = $ed20
-reagents         = $ed38
-mixtures         = $ed40
+torches          = $bd08
+gems             = $bd09
+keys             = $bd0a
+sextant          = $bd0b
+stones           = $bd0c
+runes            = $bd0d
+bell_book_candle = $bd0e
+threepartkey     = $bd0f
+food_hi          = $bd10  ; Only 4 digits of food
+food_lo          = $bd11  ; are displayed, although
+food_frac        = $bd12  ; 6 digits are tracked.
+gold_hi          = $bd13
+gold_lo          = $bd14
+horn             = $bd15
+wheel            = $bd16
+skull            = $bd17
+armour           = $bd18
+weapons          = $bd20
+reagents         = $bd38
+mixtures         = $bd40
 
 party_stat_torches  = torches  - party_stats
 party_stat_gems     = gems     - party_stats

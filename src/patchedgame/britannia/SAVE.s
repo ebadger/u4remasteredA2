@@ -82,7 +82,7 @@ j_overlay_entry:
 	sta game_mode
 	sta horse_mode
 	lda #disk_towne
-	jsr j_request_disk
+	jsr j_switch_directory
 	jsr j_primm_cout
 	.byte $84,"BLOAD MAP@,A$8B00", $8d
 	.byte 0

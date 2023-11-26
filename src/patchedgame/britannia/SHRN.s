@@ -59,7 +59,7 @@ min_spk_row = $07
 
 @haverune:
 	jsr j_primm_cout
-	.byte $84,"BLOAD SHRI,A$280", $8d
+	.byte $84,"BLOAD SHRI,A$0280", $8d
 	.byte 0
 	ldx #$7f
 @copymap:
@@ -127,7 +127,7 @@ min_spk_row = $07
 	jsr j_console_out
 	dec zp_count
 	bne @print
-	bit hw_STROBE
+	stz hw_KEYBOARD
 	lda #$00
 	sta key_buf_len
 	jsr j_primm
@@ -230,7 +230,7 @@ short_delay:
 	bne @inner
 	dey
 	bne @outer
-	bit hw_STROBE
+	stz hw_KEYBOARD
 	rts
 
 no_focus:

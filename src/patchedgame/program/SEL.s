@@ -87,7 +87,7 @@ file_char_first:
 file_char_second:
 	.byte "MUS"
 file_char_music:
-	.byte "A,A$F000", $8d
+	.byte "A,A$A000", $8d
 	.byte 0
 	lda #music_main
 	bne music_ctl

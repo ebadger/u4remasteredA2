@@ -20,8 +20,8 @@
 ; Placeholder operands that get altered
 ; by self-modifying code.
 
-TMP_PAGE = $ff00
-TMP_ADDR = $ffff
+TMP_PAGE = $c800
+TMP_ADDR = $c8ff
 
 
 ; --- Custom use of Zero Page
@@ -991,7 +991,7 @@ menu_which_slot:
 
 load_sound_drivers:
 	jsr j_primm_cout
-	.byte $84,"BLOAD MBSM,A$F000", $8d
+	.byte $84,"BLOAD MBSM,A$A000", $8d
 	.byte $84,"BLOAD MBSI,A$8000", $8d
 	.byte 0
 	jsr j_mbsi
@@ -1171,7 +1171,7 @@ input_char:
 	jsr delay_96
 	lda hw_KEYBOARD
 	bpl input_char
-	bit hw_STROBE
+	stz hw_KEYBOARD
 	pha
 	jsr j_console_out
 	pla
@@ -1188,7 +1188,7 @@ journey_onward:
 	lda #music_off
 	jsr load_music
 	jsr j_primm_cout
-	.byte $84,"BLOAD TRAINERS", $8d
+	.byte $84,"BLOAD TRAINERS,A$AB00", $8d
 	.byte $84,"BRUN ULT4,A$4000", $8d
 	.byte 0
 
@@ -1605,7 +1605,7 @@ input_text:
 	bne @delay
 	lda hw_KEYBOARD
 	bpl @elapse_cursor
-	bit hw_STROBE
+	stz hw_KEYBOARD
 	cmp #char_DEL
 	bne :+
 	lda #char_left_arrow

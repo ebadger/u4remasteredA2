@@ -324,9 +324,9 @@ conclusion:
 	lda #music_off
 	jsr music_ctl
 	jsr j_primm_cout
-	.byte $84,"BLOAD NPRT,A$0",$8d
-	.byte $84,"BLOAD NLST,A$EE00",$8d
-	.byte $84,"BLOAD NRST,A$EC00",$8d
+	.byte $84,"BLOAD NPRT,A$0000",$8d
+	.byte $84,"BLOAD NLST,A$BE00",$8d
+	.byte $84,"BLOAD NRST,A$BC00",$8d
 	.byte 0
 	lda game_mode
 	sta game_mode_pre_combat

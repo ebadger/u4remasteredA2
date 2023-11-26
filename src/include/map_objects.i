@@ -49,20 +49,20 @@ xy_max_tile_cache = xy_last_tile_cache - 1
 ; Map data in all three contexts
 ; occupy all 4 pages
 
-towne_map = $e800
+towne_map = $b800
 
-dng_map = $e800
+dng_map = $b800
 
-world_map_NW = $e800
-world_map_NE = $e900
-world_map_SW = $ea00
-world_map_SE = $eb00
+world_map_NW = $b800
+world_map_NE = $b900
+world_map_SW = $ba00
+world_map_SE = $bb00
 
 
 ;----------------------------
 ; (note: see ROST.i for these pages)
-; player_stats = $ec00
-; party_stats = $ed00
+; player_stats = $bc00
+; party_stats = $bd00
 
 
 ;----------------------------
@@ -71,17 +71,17 @@ world_map_SE = $eb00
 ; Tracking values are sliced by purpose,
 ; indexed by object ID  0 - 31
 
-object_tile_sprite = $ee00
-object_xpos        = $ee20
-object_ypos        = $ee40
-object_tile_type   = $ee60
-object_xpos_prev   = $ee80
-object_ypos_prev   = $eea0
+object_tile_sprite = $be00
+object_xpos        = $be20
+object_ypos        = $be40
+object_tile_type   = $be60
+object_xpos_prev   = $be80
+object_ypos_prev   = $bea0
 ; Dungeon only
-object_dng_level   = $eec0
+object_dng_level   = $bec0
 ; Towne only
-npc_movement_ai    = $eec0
-npc_dialogue       = $eee0
+npc_movement_ai    = $bec0
+npc_dialogue       = $bee0
 
 ai_stationary = $00
 ai_random = $01
@@ -104,20 +104,20 @@ object_last = $20
 
 foes_max = $0f
 
-combat_foe_cur_x       = $ef00
-combat_foe_cur_y       = $ef10
-combat_foe_prev_x      = $ef20
-combat_foe_prev_y      = $ef30
-combat_foe_hp          = $ef40
-combat_foe_tile_type   = $ef50
-combat_foe_tile_sprite = $ef60
-combat_foe_slept       = $ef70
-combat_player_xpos     = $ef80
-combat_player_ypos     = $ef90
-combat_player_tile     = $efa0
+combat_foe_cur_x       = $bf00
+combat_foe_cur_y       = $bf10
+combat_foe_prev_x      = $bf20
+combat_foe_prev_y      = $bf30
+combat_foe_hp          = $bf40
+combat_foe_tile_type   = $bf50
+combat_foe_tile_sprite = $bf60
+combat_foe_slept       = $bf70
+combat_player_xpos     = $bf80
+combat_player_ypos     = $bf90
+combat_player_tile     = $bfa0
 
-combat_unused          = $efb0
+combat_unused          = $bfb0
 
-attack_sprite          = $effd
-target_x               = $effe
-target_y               = $efff
+attack_sprite          = $bffd
+target_x               = $bffe
+target_y               = $bfff
