@@ -3,18 +3,18 @@
 
 ;----------------------------
 ; Each player character occupies $20 bytes
-; $ec00  slot 1
-; $ec20  slot 2
-; $ec40  slot 3
-; $ec60  slot 4
-; $ec80  slot 5
-; $eca0  slot 6
-; $ecc0  slot 7
-; $ece0  slot 8
+; $bc00  slot 1
+; $bc20  slot 2
+; $bc40  slot 3
+; $bc60  slot 4
+; $bc80  slot 5
+; $bca0  slot 6
+; $bcc0  slot 7
+; $bce0  slot 8
 
 ; --- ADDRESSES
 
-player_stats = $ec00
+player_stats = $bc00
 
 player_max  = $07
 player_last = $08

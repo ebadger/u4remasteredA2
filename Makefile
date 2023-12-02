@@ -344,6 +344,7 @@ $(MB_FILES): tools/mbsm_split.py $(mb_dir)/MBSM.prg
 .PHONY: \
 	all \
 	extract \
+	copy \
 	clean $(CLEAN) \
 	distclean $(DISTCLEAN)
 
@@ -353,4 +354,7 @@ clean: $(CLEAN)
 
 distclean: $(DISTCLEAN)
 
-all: $(DISKS) $(MB_FILES) $(output_dir)/slideshow_start.do $(output_dir)/slideshow_end.do | $(output_dir)
+copyfiles:
+	cp $(output_dir)/* /mnt/c/u4out
+
+all: $(DISKS) $(MB_FILES) copyfiles $(output_dir)/slideshow_start.do $(output_dir)/slideshow_end.do | $(output_dir)

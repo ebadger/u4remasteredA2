@@ -13,8 +13,8 @@
 ; Placeholder operands that get altered
 ; by self-modifying code.
 
-TMP_PAGE = $ff00
-TMP_ADDR = $ffff
+TMP_PAGE = $CF00
+TMP_ADDR = $CFFF
 
 
 ; --- Custom use of Zero Page

@@ -9,6 +9,7 @@
 	.include "moons.i"
 	.include "tables.i"
 	.include "tiles.i"
+    .include "disks.i"
 	.include "zp_main.i"
 	.include "zp_map_scroll.i"
 	.include "zp_line_of_sight.i"
@@ -16,12 +17,11 @@
 	.include "PRTY.i"
 	.include "ROST.i"
 
-
 ; Placeholder operands that get altered
 ; by self-modifying code.
 
-TMP_PAGE = $c800
-TMP_ADDR = $c8ff
+TMP_PAGE = $CF00
+TMP_ADDR = $CFFF
 
 
 ; --- Custom use of Zero Page
@@ -1262,7 +1262,7 @@ primm_cout:
 @skip:
 	lda (ptr1),y
 	beq @done
-	ora #$80
+	;ora #$80
 	jsr @cout
 	jmp @next
 
@@ -2335,47 +2335,56 @@ moongate_xtab:
 moongate_ytab:
 	.byte $85,$66,$e0,$25,$13,$c2,$7e,$a7
 
-switch_directory:
-	; 2 == britannia
-	; 1 == towne
-	; 0 == underworld
+parent_dir:
+	jsr j_primm_cout
+	.byte $84,"CD ..", $8d, 0
+	rts
 
+directory:
+	jsr j_primm_cout
+	.byte $84,"DIR", $8d, 0
+	rts
+   
+switch_directory:
+
+	;disk_program   = $01
+	;disk_britannia = $02
+	;disk_towne     = $03
+	;disk_dungeon   = $04
+	
 	sta reqdisk
+	cmp #disk_dungeon
 	beq @underworld
-	dec reqdisk
+	cmp #disk_towne
 	beq @towne
-	dec reqdisk
+	cmp #disk_britannia
 	beq @britannia
+	cmp #disk_program
+	beq @program
 	rts
 
 @underworld:
-	jsr j_primm_cout
-	.byte $84,"CD ..", $8d
-	.byte 0
-
-	jsr j_primm_cout
-	.byte $84,"CD UWORLD", $8d
-	.byte 0
+    jsr parent_dir
+ 	jsr j_primm_cout
+	.byte $84,"CD UWORLD", $8d, 0
 	rts
 
 @towne:
+    jsr parent_dir
 	jsr j_primm_cout
-	.byte $84,"CD ..", $8d
-	.byte 0
-
-	jsr j_primm_cout
-	.byte $84,"CD TOWNE", $8d
-	.byte 0
+	.byte $84,"CD TOWNE", $8d, 0
 	rts
 
 @britannia:
+    jsr parent_dir
 	jsr j_primm_cout
-	.byte $84,"CD ..", $8d
-	.byte 0
+	.byte $84,"CD BRITANIA", $8d, 0
+	rts
 
+@program:
+    jsr parent_dir
 	jsr j_primm_cout
-	.byte $84,"CD BRITANIA", $8d
-	.byte 0
+	.byte $84,"CD PROGRAM", $8d, 0
 	rts
 
 request_disk:
