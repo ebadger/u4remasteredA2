@@ -329,7 +329,7 @@ return_to_main_conv:
 	lda #music_off
 	jsr music_ctl
 	jsr j_primm_cout
-	.byte $84,"BRUN LORD,A$8800", $8d
+	.byte $84,"BRUN LORD 8800", $8d
 	.byte 0
 
 ; junk

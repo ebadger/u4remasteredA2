@@ -31,7 +31,7 @@ all:
 done:
 	jsr deselectline
 	jsr j_primm_cout
-	.byte $84,"BRUN BOOT,A$6000", $8d, 0
+	.byte $84,"BRUN BOOT 6000", $8d, 0
 
 set_all_flags:
 	ldx #num_trainers

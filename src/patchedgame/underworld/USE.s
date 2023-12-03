@@ -83,7 +83,7 @@ keyword_handlers:
 
 return_to_dungeon:
 	jsr j_primm_cout
-	.byte $84,"BLOAD DNGD,A$8C00", $8d
+	.byte $84,"BLOAD DNGD 8C00", $8d
 	.byte 0
 	lda saved_game_mode
 	cmp #mode_dungeon
@@ -242,7 +242,7 @@ use_stone_in_abyss:
 
 @load_end_game:
 	jsr j_primm_cout
-	.byte $84,"BRUN END,A$8800", $8d
+	.byte $84,"BRUN END 8800", $8d
 	.byte 0
 
 placed_stone_mask:

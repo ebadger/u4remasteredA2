@@ -84,7 +84,7 @@ j_overlay_entry:
 	lda #disk_towne
 	jsr j_switch_directory
 	jsr j_primm_cout
-	.byte $84,"BLOAD MAP@,A$8B00", $8d
+	.byte $84,"BLOAD MAP@ 8B00", $8d
 	.byte 0
 	ldx #$00
 @next_map_cell:

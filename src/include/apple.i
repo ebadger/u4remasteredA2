@@ -26,8 +26,8 @@ hw_ROMIN    = $c081
 hw_LCBANK2  = $c083
 hw_LCBANK1  = $c08b
 
-drive_motor_off = $c088
-drive_motor_on  = $c089
+;drive_motor_off = $c088
+;drive_motor_on  = $c089
 
 rom_SHADOW_FXXX = $f000
 rom_SHADOW_EXXX = $e000
@@ -35,7 +35,7 @@ rom_signature   = $fbb3
 rom_ZIDBYTE     = $fbc0
 rom_HOME        = $fc58
 rom_COUT        = $fded
-rom_IIgs_ID     = $fe1f
+;rom_IIgs_ID     = $fe1f
 
 vector_NMI   = $fffa
 vector_RESET = $fffc

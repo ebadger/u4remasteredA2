@@ -87,24 +87,24 @@ file_char_first:
 file_char_second:
 	.byte "MUS"
 file_char_music:
-	.byte "A,A$A000", $8d
+	.byte "A A000", $8d
 	.byte 0
 	lda #music_main
 	bne music_ctl
 
 spin_drive_motor:
-	pha
-	ldx RWTS_slot
-	lda drive_motor_on,x
-	ldx #$05
-@delay:
-	ldy #$00
-:	iny
-	bne :-
-	dex
-	bne @delay
-	ldx RWTS_slot
-	lda drive_motor_off,x
-	pla
+;	pha
+;	ldx RWTS_slot
+;	lda drive_motor_on,x
+;	ldx #$05
+;@delay:
+;	ldy #$00
+;:	iny
+;	bne :-
+;	dex
+;	bne @delay
+;	ldx RWTS_slot
+;	lda drive_motor_off,x
+;	pla
 	rts
 

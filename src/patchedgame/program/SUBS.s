@@ -34,7 +34,7 @@ zp_sfx_freq = $da
 zp_sfx_duration = $f0
 
 
-	.segment "SUBS"
+.segment "SUBS"
 
 j_waitkey:
 	jmp waitkey
@@ -202,7 +202,7 @@ move_east:
 	lda tile_xpos
 	cmp #(xy_last_tile_cache - $08)
 	bcc @notileborder
-	jsr spin_drive_motor
+	;jsr spin_drive_motor
 @notileborder:
 	cmp #(xy_last_tile_cache - xy_center_screen)
 	bcc movedone
@@ -223,7 +223,7 @@ move_west:
 	lda tile_xpos
 	cmp #$08
 	bcs @notileborder
-	jsr spin_drive_motor
+	;jsr spin_drive_motor
 @notileborder:
 	cmp #xy_center_screen
 	bcs movedone
@@ -242,7 +242,7 @@ move_south:
 	lda tile_ypos
 	cmp #(xy_last_tile_cache - $08)
 	bcc @notileborder
-	jsr spin_drive_motor
+	;jsr spin_drive_motor
 @notileborder:
 	cmp #(xy_last_tile_cache - xy_center_screen)
 	bcc @done
@@ -263,7 +263,7 @@ move_north:
 	lda tile_ypos
 	cmp #$08
 	bcs @notileborder
-	jsr spin_drive_motor
+	;jsr spin_drive_motor
 @notileborder:
 	cmp #xy_center_screen
 	bcs @done
@@ -323,8 +323,8 @@ map_scroll_north:
 	rts
 
 loadtiles_east:
-	lda #RWTS_command_read
-	sta diskio_command
+	;lda #RWTS_command_read
+	;sta diskio_command
 	clc
 	lda map_x
 	adc #$01
@@ -345,8 +345,8 @@ loadtiles_east:
 	jmp loadsector
 
 loadtiles_west:
-	lda #RWTS_command_read
-	sta diskio_command
+	;lda #RWTS_command_read
+	;sta diskio_command
 	clc
 	lda map_x
 	sta diskio_sector
@@ -365,8 +365,8 @@ loadtiles_west:
 	jmp loadsector
 
 loadtiles_south:
-	lda #RWTS_command_read
-	sta diskio_command
+	;lda #RWTS_command_read
+	;sta diskio_command
 	clc
 	lda map_y
 	adc #$01
@@ -387,8 +387,8 @@ loadtiles_south:
 	jmp loadsector
 
 loadtiles_north:
-	lda #RWTS_command_read
-	sta diskio_command
+	;lda #RWTS_command_read
+	;sta diskio_command
 	clc
 	lda map_y
 	sta diskio_track
@@ -439,8 +439,8 @@ player_teleport:
 	and #$0f
 	sta map_y
 @southern:
-	lda #RWTS_command_read
-	sta diskio_command
+	;lda #RWTS_command_read
+	;sta diskio_command
 	lda map_x
 	sta diskio_sector
 	lda map_y
@@ -468,30 +468,111 @@ player_teleport:
 	sta diskio_sector
 	lda #>world_map_SW
 	sta diskio_addr_hi
+
 loadsector:
-	lda #$00
-	sta RWTS_volume
-	sta RWTS_buf_LO
+	lda tmp_addr_l
+	pha
+	lda tmp_addr_h
+	pha
+
+	;lda #$00
+	;sta RWTS_buf_LO
+	;lda diskio_track     ;$08
+	;sta RWTS_track
+	;lda diskio_sector
+	;sta RWTS_sector      ;$0D
+	;lda diskio_addr_hi
+	;sta RWTS_buf_HI      ;$B8
+
+	;lda #RWTS_data_epilogue_byte3
+	;sta DOS_data_prologue_3 ;part of copy protection  ;$AD
+	;sta RWTS_write_data_epilogue3
+	;lda #$9b     ;restore normal decode value (presumed part of copy protect on disk 1)
+	;sta DOS_NIBL+3
+
+	;lda #<RWTS_params
+	;ldy #>RWTS_params
+	;jsr RWTS_readblock ;sets IOBP H/L to $YYAA
+
+    lda #<fload_command
+	sta tmp_addr_l
+	lda #>fload_command
+    sta tmp_addr_h
+
+    ldy #$7 ; beginning of the filename
+
+    lda reqdisk
+check_britannia:
+	cmp #disk_britannia
+    bne check_towne
+    lda #'M'
+	sta (tmp_addr_l),y
+    iny
+	lda #'A'
+	sta (tmp_addr_l),y
+    iny
+	lda #'P'
+	sta (tmp_addr_l),y
+    bra format_string
+
+check_towne:
+	cmp #disk_towne
+    bne check_dungeon
+    lda #'T'
+	sta (tmp_addr_l),y
+    iny
+	lda #'L'
+	sta (tmp_addr_l),y
+    iny
+	lda #'K'
+	sta (tmp_addr_l),y
+    bra format_string
+
+check_dungeon:
+    lda #'D'
+	sta (tmp_addr_l),y
+    iny
+	lda #'N'
+	sta (tmp_addr_l),y
+    iny
+	lda #'G'
+	sta (tmp_addr_l),y
+
+
+format_string:
+    ; format string - write dest address
+    iny
 	lda diskio_track
-	sta RWTS_track
-	lda diskio_sector
-	sta RWTS_sector
-	lda diskio_addr_hi
-	sta RWTS_buf_HI
-	lda diskio_command
-	sta RWTS_command
-	lda #RWTS_data_epilogue_byte3
-	sta DOS_data_prologue_3 ;part of copy protection
-	sta RWTS_write_data_epilogue3
-	lda #$9b     ;restore normal decode value (presumed part of copy protect on disk 1)
-	sta DOS_NIBL+3
-	lda #<RWTS_params
-	ldy #>RWTS_params
-	jsr RWTS_readblock ;sets IOBP H/L to $YYAA
-	lda #$00
-	sta RWTS_IOBPL ;why clear this? protect against snooping?
-	bcs loadsector
+    jsr write_nybble
+
+	ldy #$10 ; point to address in string
+    lda diskio_addr_hi
+    jsr write_hex
+
+    jsr write_address
+    jsr write_address
+
+	jsr j_primm_cout
+fload_command:	
+	.byte $84,"FLOAD @@@@.BIN @@00 @@00 @@FF",$8D,0
+
+	pla
+	sta tmp_addr_h
+	pla
+	sta tmp_addr_l
+    
+	;bcs loadsector	
 	rts
+
+write_address:
+    iny
+	iny
+	iny
+    
+    ; format string - write byte offset
+	clc
+	lda diskio_sector
+    jmp write_hex
 
 waitkey:
 	lda #$80
@@ -514,6 +595,27 @@ waitkey:
 	pla
 	cmp #$00
 	rts
+
+write_hex:
+    pha
+    ror
+    ror
+    ror
+    ror
+    jsr write_nybble
+    pla
+    jmp write_nybble
+
+write_nybble:
+    and #15
+    cmp #10
+    bmi @skipletter
+    adc #6
+@skipletter:
+    adc #48
+	sta (tmp_addr_l),y
+	iny
+    rts
 
 idletimeout:
 	.byte 0

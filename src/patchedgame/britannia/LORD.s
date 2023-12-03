@@ -637,7 +637,7 @@ answer_help:
 	lda #music_off
 	jsr music_ctl
 	jsr j_primm_cout
-	.byte $84,"BRUN HELP,A$8800", $8d
+	.byte $84,"BRUN HELP 8800", $8d
 	.byte 0
 
 answer_abyss:

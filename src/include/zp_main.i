@@ -24,6 +24,10 @@ disk_id = $d0
 numdrives = $d1
 currdisk_drive1 = $d2
 currdisk_drive2 = $d3
+
+tmp_addr_l = $d2
+tmp_addr_h = $d3
+
 curr_player = $d4
 target_player = $d5
 hexnum = $d6
@@ -35,6 +39,7 @@ bcdnum = $d7
 damage = $dc
 reqdisk = $de
 currdrive = $df
+
 diskio_track = $e0
 diskio_sector = $e1
 diskio_command = $e2

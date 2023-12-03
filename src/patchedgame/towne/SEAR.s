@@ -138,11 +138,11 @@ find_telescope:
 	jsr j_primm_cout
 	.byte $84,"BLOAD MAP"
 file_char_map:
-	.byte "@,A$8B00", $8d
+	.byte "@ 8B00", $8d
 	.byte 0
 	jsr copymap
 	jsr j_primm_cout
-	.byte $84,"BLOAD TMAP,A$9000", $8d
+	.byte $84,"BLOAD TMAP 9000", $8d
 	.byte 0
 	lda #mode_suspended
 	sta game_mode
@@ -150,7 +150,7 @@ file_char_map:
 	lda #mode_towne
 	sta game_mode
 	jsr j_primm_cout
-	.byte $84,"BLOAD MAPB,A$8B00", $8d
+	.byte $84,"BLOAD MAPB 8B00", $8d
 	.byte 0
 	jsr copymap
 	rts

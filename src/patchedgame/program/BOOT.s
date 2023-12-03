@@ -33,8 +33,8 @@ zp_keybuf_count = $ea
 
 boot:
 	jsr j_primm_cout
-	.byte $84,"BLOAD ANIM,A$4000", $8d
-	.byte $84,"BLOAD BGND,A$7A00", $8d
+	.byte $84,"BLOAD ANIM 4000", $8d
+	.byte $84,"BLOAD BGND 7A00", $8d
 	.byte 0
 	jsr clear_screen
 	bit hw_PAGE1
@@ -991,8 +991,8 @@ menu_which_slot:
 
 load_sound_drivers:
 	jsr j_primm_cout
-	.byte $84,"BLOAD MBSM,A$A000", $8d
-	.byte $84,"BLOAD MBSI,A$8000", $8d
+	.byte $84,"BLOAD MBSM A000", $8d
+	.byte $84,"BLOAD MBSI 8000", $8d
 	.byte 0
 	jsr j_mbsi
 	bcc @skip
@@ -1188,8 +1188,8 @@ journey_onward:
 	lda #music_off
 	jsr load_music
 	jsr j_primm_cout
-	.byte $84,"BLOAD TRAINERS,A$AB00", $8d
-	.byte $84,"BRUN ULT4,A$4000", $8d
+	.byte $84,"BLOAD TRAINERS FB00", $8d
+	.byte $84,"BRUN ULT4 4000", $8d
 	.byte 0
 
 init_new_game:
@@ -1247,8 +1247,8 @@ init_new_game:
 	lda #music_off
 	jsr load_music
 	jsr j_primm_cout
-	.byte $84,"BLOAD TRAINERS,D1", $8d
-	.byte $84,"BRUN NEWGAME,A$6400,D1", $8d
+	.byte $84,"BLOAD TRAINERS FB00", $8d
+	.byte $84,"BRUN NEWGAME 6400", $8d
 	.byte 0
 return:
 	rts

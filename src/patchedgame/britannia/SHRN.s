@@ -59,7 +59,7 @@ min_spk_row = $07
 
 @haverune:
 	jsr j_primm_cout
-	.byte $84,"BLOAD SHRI,A$0280", $8d
+	.byte $84,"BLOAD SHRI 0280", $8d
 	.byte 0
 	ldx #$7f
 @copymap:

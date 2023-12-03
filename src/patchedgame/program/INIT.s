@@ -56,20 +56,20 @@ cout_stub = $1fff
 	.byte "  PORTED TO 3R1C 2023.", $8d
 	.byte 0
 	jsr print_cout
-	.byte $84, "BLOAD SEL,A$0320", $8d
-	.byte $84, "BLOAD SUBS,A$0800", $8d
+	.byte $84, "BLOAD SEL 0320", $8d
+	.byte $84, "BLOAD SUBS 0800", $8d
 	.byte 0
 
 	lda #disk_program
 	sta disk_id
 
-	lda #$40        ; ROM AppleSoft
-	sta DOS_ASIBSW  ; AppleSoft/IntBasic Switch
+	;lda #$40        ; ROM AppleSoft
+	;sta DOS_ASIBSW  ; AppleSoft/IntBasic Switch
 
-	lda #<on_dos_error
-	sta DOS_BREAK
-	lda #>on_dos_error
-	sta DOS_BREAK + 1
+	;lda #<on_dos_error
+	;sta DOS_BREAK
+	;lda #>on_dos_error
+	;sta DOS_BREAK + 1
 
 ; unsure what this is for
 	lda #$80
@@ -132,23 +132,23 @@ cout_stub = $1fff
 	bit hw_LCBANK1 ;read twice to
 	bit hw_LCBANK1 ;RW-enable LC RAM bank1
 	jsr j_primm_cout
-	.byte $84,"BLOAD SHP0,A$D000", $8d
+	.byte $84,"BLOAD SHP0 D000", $8d
 	.byte 0
 	bit hw_LCBANK2 ;read twice to RW-enable LC RAM bank2
 	jsr j_primm_cout
-	.byte $84,"BLOAD SHP1,A$D000", $8d
-	.byte $84,"BLOAD TBLS,A$B000", $8d
-	.byte $84,"BLOAD HTXT,A$B400", $8d
+	.byte $84,"BLOAD SHP1 D000", $8d
+	.byte $84,"BLOAD TBLS B000", $8d
+	.byte $84,"BLOAD HTXT B400", $8d
 	.byte 0
 
 	lda hw_KEYBOARD
 	cmp #$54  ; T
 	beq trainer_menu
 	jsr j_primm_cout
-	.byte $84,"BRUN BOOT,A$6000", $8d, 0
+	.byte $84,"BRUN BOOT 6000", $8d, 0
 trainer_menu:
 	jsr j_primm_cout
-	.byte $84,"BRUN MENU,A$6000", $8d, 0
+	.byte $84,"BRUN MENU 6000", $8d, 0
 
 print_cout:
 	pla
@@ -177,26 +177,30 @@ print_cout:
 ;ENHANCEMENT: IIgs support
 
 detect_hw_model:
-	lda #$00
-	bit hw_ROMIN
-
-	ldx rom_signature
-	cpx #$06     ;Apple //e or above
-	bne @support_mb
-
-	ldx rom_ZIDBYTE
-	beq @done    ;Apple //c
-
-	sec
-	jsr rom_IIgs_ID
-	bcs @support_mb
-	lda #$80     ;Apple IIgs
-
-@support_mb:
-	ora #$01
-@done:
+    lda #$6
 	sta zp_hw_model
 	rts
+
+;	lda #$00
+;	bit hw_ROMIN
+
+;	ldx rom_signature
+;	cpx #$06     ;Apple //e or above
+;	bne @support_mb
+
+;	ldx rom_ZIDBYTE
+;	beq @done    ;Apple //c
+
+;	sec
+;	jsr rom_IIgs_ID
+;	bcs @support_mb
+;	lda #$80     ;Apple IIgs
+
+;@support_mb:
+;	ora #$01
+;@done:
+;	sta zp_hw_model
+;	rts
 
 
 set_iigs_color:

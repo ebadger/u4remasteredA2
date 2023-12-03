@@ -46,6 +46,8 @@ DISK_NAMES = program britannia towne underworld
 
 output_dir = output
 
+dos_dir = /mnt/c/u4extract
+
 # u4program.do etc.  ("do" = Dos Order sectors, disk image file)
 DISKS = $(patsubst %,$(output_dir)/u4%.do,$(DISK_NAMES))
 
@@ -356,5 +358,11 @@ distclean: $(DISTCLEAN)
 
 copyfiles:
 	cp $(output_dir)/* /mnt/c/u4out
+	cp files/extracted/britannia/MAP.bin /mnt/c/u4out
+	cp files/extracted/towne/TLK.bin /mnt/c/u4out
+	cp files/extracted/underworld/DNG.bin /mnt/c/u4out
 
-all: $(DISKS) $(MB_FILES) copyfiles $(output_dir)/slideshow_start.do $(output_dir)/slideshow_end.do | $(output_dir)
+extract_output:
+	python3 tools/extract_files2.py $(output_dir)/u4program.do $(output_dir)/u4britannia.do $(output_dir)/u4towne.do $(output_dir)/u4underworld.do $(dos_dir)
+
+all: $(DISKS) $(MB_FILES) copyfiles extract_output $(output_dir)/slideshow_start.do $(output_dir)/slideshow_end.do | $(output_dir)

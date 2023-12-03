@@ -37,7 +37,7 @@ string_transport = $43
 ; Placeholder operands that get altered
 ; by self-modifying code.
 
-TMP_ADDR = $ffff
+TMP_ADDR = $cfff
 
 
 	.segment "MAIN"
@@ -52,7 +52,7 @@ start_game:
 	lda #music_off
 	jsr music_ctl
 	jsr j_primm_cout
-	.byte $84,"BRUN ULT4,A$4000",$8d, 0
+	.byte $84,"BRUN ULT4 4000",$8d, 0
 
 wait_key:
 	jsr j_waitkey
@@ -68,7 +68,7 @@ init_scene:
 	lda #$10
 	sta console_ypos
 	jsr j_primm_cout
-	.byte $84,"BLOAD TREE.SPK,A$4000",$8d, 0
+	.byte $84,"BLOAD TREE.SPK 4000",$8d, 0
 	jsr clear_text_area
 @s1D_show_tree:
 	jsr spk_unpack
@@ -96,7 +96,7 @@ start_scene:
 	bne @s24_show_clearing
 	jsr portal_vanish
 	jsr j_primm_cout
-	.byte $84,"BLOAD PRTL.SPK,A$4000",$8d, 0
+	.byte $84,"BLOAD PRTL.SPK 4000",$8d, 0
 	jmp next_scene
 
 @s24_show_clearing:
@@ -104,7 +104,7 @@ start_scene:
 	bne @s29_show_tree
 	jsr spk_unpack
 	jsr j_primm_cout
-	.byte $84,"BLOAD TREE.SPK,A$4000",$8d, 0
+	.byte $84,"BLOAD TREE.SPK 4000",$8d, 0
 	jmp next_scene
 
 @s29_show_tree:
@@ -112,7 +112,7 @@ start_scene:
 	bne @s2C_music_towne
 	jsr spk_unpack
 	jsr j_primm_cout
-	.byte $84,"BLOAD LOOK.SPK,A$4000",$8d, 0
+	.byte $84,"BLOAD LOOK.SPK 4000",$8d, 0
 	jmp next_scene
 
 @s2C_music_towne:
@@ -127,7 +127,7 @@ start_scene:
 	bne @s2F_show_fair
 	jsr spk_unpack
 	jsr j_primm_cout
-	.byte $84,"BLOAD FAIR.SPK,A$4000",$8d, 0
+	.byte $84,"BLOAD FAIR.SPK 4000",$8d, 0
 	jmp next_scene
 
 @s2F_show_fair:
@@ -135,7 +135,7 @@ start_scene:
 	bne @s32_show_wagon
 	jsr spk_unpack
 	jsr j_primm_cout
-	.byte $84,"BLOAD WAGN.SPK,A$4000",$8d, 0
+	.byte $84,"BLOAD WAGN.SPK 4000",$8d, 0
 	jmp next_scene
 
 @s32_show_wagon:
@@ -143,7 +143,7 @@ start_scene:
 	bne @s33_show_gypsy
 	jsr spk_unpack
 	jsr j_primm_cout
-	.byte $84,"BLOAD GYPS.SPK,A$4000",$8d, 0
+	.byte $84,"BLOAD GYPS.SPK 4000",$8d, 0
 	jmp next_scene
 
 @s33_show_gypsy:
@@ -151,7 +151,7 @@ start_scene:
 	bne @s35_show_table
 	jsr spk_unpack
 	jsr j_primm_cout
-	.byte $84,"BLOAD TABL.SPK,A$4000",$8d, 0
+	.byte $84,"BLOAD TABL.SPK 4000",$8d, 0
 @next_scene:
 	jmp next_scene
 
@@ -160,7 +160,7 @@ start_scene:
 	bne @next_scene
 	jsr spk_unpack
 	jsr j_primm_cout
-	.byte $84,"BLOAD CRDS,A$4000",$8d, 0
+	.byte $84,"BLOAD CRDS 4000",$8d, 0
 	jsr wait_key
 
 ; Begin fortune telling
@@ -324,9 +324,9 @@ conclusion:
 	lda #music_off
 	jsr music_ctl
 	jsr j_primm_cout
-	.byte $84,"BLOAD NPRT,A$0000",$8d
-	.byte $84,"BLOAD NLST,A$BE00",$8d
-	.byte $84,"BLOAD NRST,A$BC00",$8d
+	.byte $84,"BLOAD NPRT 0000",$8d
+	.byte $84,"BLOAD NLST BE00",$8d
+	.byte $84,"BLOAD NRST BC00",$8d
 	.byte 0
 	lda game_mode
 	sta game_mode_pre_combat

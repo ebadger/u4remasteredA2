@@ -53,7 +53,7 @@ min_spk_row = $07
 	bit hw_LCBANK1
 	bit hw_LCBANK1
 	jsr j_primm_cout
-	.byte $84,"BLOAD CSTRING,A$4000", $8d
+	.byte $84,"BLOAD CSTRING 4000", $8d
 	.byte 0
 	lda party_size
 	sta save_party_size
@@ -437,7 +437,7 @@ return_to_world:
 	lda #disk_program
 	jsr insert_disk
 	jsr j_primm_cout
-	.byte $84, "BLOAD ULT4,A$4000", $8d
+	.byte $84, "BLOAD ULT4 4000", $8d
 	.byte 0
 	lda #disk_britannia
 	jsr j_switch_directory

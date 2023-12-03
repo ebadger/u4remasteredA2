@@ -137,7 +137,7 @@ game_init:
 
 load_saved_game:
 	jsr j_primm_cout
-	.byte $84,"BLOAD PRTY,A$0000", $8d
+	.byte $84,"BLOAD PRTY 0000", $8d
 	.byte 0
 	lda party_size
 	bne load_saved_map
@@ -150,8 +150,8 @@ halt:
 
 load_saved_map:
 	jsr j_primm_cout
-	.byte $84,"BLOAD LIST,A$BE00", $8d
-	.byte $84,"BLOAD ROST,A$BC00", $8d
+	.byte $84,"BLOAD LIST BE00", $8d
+	.byte $84,"BLOAD ROST BC00", $8d
 	.byte 0
 
 game_start:
@@ -946,7 +946,7 @@ leave_to_world:
 	lda #disk_britannia
 	jsr j_switch_directory
 	jsr j_primm_cout
-	.byte $84,"BLOAD TLST,A$BE00", $8d
+	.byte $84,"BLOAD TLST BE00", $8d
 	.byte 0
 	lda britannia_x
 	sta player_xpos
@@ -1438,7 +1438,7 @@ spell_blink:
 	sta player_xpos
 	lda temp_y
 	sta player_ypos
-	jsr spin_drive_motor
+	;jsr spin_drive_motor
 	jsr j_player_teleport
 	jmp done_done
 
@@ -1714,7 +1714,7 @@ spell_gate:
 	sta player_xpos
 	lda moongate_y,x
 	sta player_ypos
-	jsr spin_drive_motor
+	;jsr spin_drive_motor
 	jsr j_player_teleport
 	jmp done_done
 
@@ -2363,7 +2363,7 @@ load_dungeon:
 	lda #disk_dungeon
 	jsr j_switch_directory
 	jsr j_primm_cout
-	.byte $84,"BLOAD DNGD,A$8C00", $8d
+	.byte $84,"BLOAD DNGD 8C00", $8d
 	.byte 0
 	jsr load_dungeon_map
 	lda #mode_dungeon
@@ -2478,7 +2478,7 @@ load_shrine:
 	lda #music_off
 	jsr music_ctl
 	jsr j_primm_cout
-	.byte $84,"BLOAD SHRN,A$8800", $8d
+	.byte $84,"BLOAD SHRN 8800", $8d
 	.byte 0
 	jsr j_overlay_entry
 	lda #music_adventure
@@ -2509,7 +2509,8 @@ file_write_temp_map:
 	lda #disk_britannia
 	jsr j_switch_directory
 	jsr j_primm_cout
-	.byte $84,"BSAVE TLST,A$EE00,L$100", $8d
+	.byte $84,"DEL TLST", $8d
+	.byte $84,"BSAVE TLST BE00 0100", $8d
 	.byte 0
 	rts
 
@@ -2525,7 +2526,7 @@ load_letter_location:
 	jsr j_primm_cout
 	.byte $8d,$84,"BLOAD MAP"
 @map_number:
-	.byte "@,A$8B00", $8d
+	.byte "@ 8B00", $8d
 	.byte 0
 	ldx #$00
 @copy_map:
@@ -2850,7 +2851,7 @@ cmd_hole_up:
 	lda #music_off
 	jsr music_ctl
 	jsr j_primm_cout
-	.byte $84,"BLOAD HOLE,A$8800", $8d
+	.byte $84,"BLOAD HOLE 8800", $8d
 	.byte 0
 	jsr j_overlay_entry
 	jsr j_update_status
@@ -3052,7 +3053,7 @@ cmd_mix_reagents:
 	lda #music_off
 	jsr music_ctl
 	jsr j_primm_cout
-	.byte $84,"BLOAD MIX,A$8800", $8d
+	.byte $84,"BLOAD MIX 8800", $8d
 	.byte 0
 	jsr j_overlay_entry
 	lda #music_main
@@ -3181,7 +3182,7 @@ do_view:
 	lda #music_off
 	jsr music_ctl
 	jsr j_primm_cout
-	.byte $84,"BLOAD TMAP,A$9000", $8d
+	.byte $84,"BLOAD TMAP 9000", $8d
 	.byte 0
 	lda #music_peer
 	jsr music_ctl
@@ -3192,7 +3193,7 @@ do_view:
 	lda #music_off
 	jsr music_ctl
 	jsr j_primm_cout
-	.byte $84,"BLOAD DNGD,A$8C00", $8d
+	.byte $84,"BLOAD DNGD 8C00", $8d
 	.byte 0
 @skip:
 	lda #music_main
@@ -3220,9 +3221,15 @@ cmd_quit:
 	lda #disk_britannia
 	jsr j_switch_directory
 	jsr j_primm_cout
-	.byte $84,"BSAVE LIST,A$EE00,L$100", $8d
-	.byte $84,"BSAVE ROST,A$EC00,L$200", $8d
-	.byte $84,"BSAVE PRTY,A$0,L$20", $8d
+	.byte $84,"DEL LIST", $8d
+	.byte $84,"DEL ROST", $8d
+	.byte $84,"DEL PRTY", $8d
+	.byte 0
+
+	jsr j_primm_cout
+	.byte $84,"BSAVE LIST BE00 0100", $8d
+	.byte $84,"BSAVE ROST BC00 0200", $8d
+	.byte $84,"BSAVE PRTY 0000 0020", $8d
 	.byte 0
 	lda zp_save_reg1    ;ENHANCEMENT: allow save in dungeon
 	jsr j_switch_directory  ;ENHANCEMENT
@@ -3399,7 +3406,7 @@ cmd_search:
 	lda #music_off
 	jsr music_ctl
 	jsr j_primm_cout
-	.byte $84,"BLOAD SEAR,A$8800", $8d
+	.byte $84,"BLOAD SEAR 8800", $8d
 	.byte 0
 	jsr j_overlay_entry
 	lda #music_main
@@ -3457,9 +3464,9 @@ no_response:
 	sta diskio_sector
 	beq no_response
 	dec diskio_sector
-	lda #RWTS_command_read
-	sta diskio_command
-	lda #$ef     ;>__DIALOG_RUN__
+;	lda #RWTS_command_read
+;	sta diskio_command
+	lda #$bf     ;>__DIALOG_RUN__
 	sta diskio_addr_hi
 	lda #music_off
 	jsr music_ctl
@@ -3470,7 +3477,7 @@ no_response:
 	lda #disk_britannia
 	jsr j_switch_directory
 	jsr j_primm_cout
-	.byte $84,"BLOAD LORD,A$8800", $8d
+	.byte $84,"BLOAD LORD 8800", $8d
 	.byte 0
 	lda #music_British
 	jsr music_ctl
@@ -3486,7 +3493,7 @@ no_response:
 @talk_non_british:
 	jsr j_loadsector
 	jsr j_primm_cout
-	.byte $84,"BLOAD TALK,A$8800", $8d
+	.byte $84,"BLOAD TALK 8800", $8d
 	.byte 0
 	jsr j_overlay_entry
 @end_talk:
@@ -3498,7 +3505,7 @@ check_shop:
 	lda #music_off
 	jsr music_ctl
 	jsr j_primm_cout
-	.byte $84,"BLOAD SHPS,A$8800", $8d
+	.byte $84,"BLOAD SHPS 8800", $8d
 	.byte 0
 	lda #$88
 	sta ptr1 + 1
@@ -3550,7 +3557,7 @@ load_shop:
 	jsr j_primm_cout
 	.byte $84,"BLOAD SHP"
 @file_char_shop:
-	.byte "@,A$8800", $8d
+	.byte "@ 8800", $8d
 	.byte 0
 	lda #music_shop
 	jsr music_ctl
@@ -3566,7 +3573,7 @@ cmd_use_item:
 	lda #music_off
 	jsr music_ctl
 	jsr j_primm_cout
-	.byte $84,"BLOAD USE,A$8800", $8d
+	.byte $84,"BLOAD USE 8800", $8d
 	.byte 0
 	jsr j_overlay_entry
 	lda game_mode
@@ -5984,8 +5991,8 @@ do_dungeon_room:
 :	lda tile_under_player
 	and #dng_tile_room_mask
 	sta diskio_sector
-	lda #RWTS_command_read
-	sta diskio_command
+;	lda #RWTS_command_read
+;	sta diskio_command
 	lda #>room_load_addr
 	sta diskio_addr_hi
 	jsr j_loadsector
@@ -6212,7 +6219,7 @@ load_arena:
 	jsr j_primm_cout
 	.byte $84,"BLOAD CON"
 @file_char_arena:
-	.byte "@,A$240", $8d
+	.byte "@ 0240", $8d
 	.byte 0
 initialize_arena:
 	lda game_mode
@@ -8889,7 +8896,7 @@ run_file_dead:
 	lda #disk_britannia
 	jsr j_switch_directory
 	jsr j_primm_cout
-	.byte $84,"BLOAD SAVE,A$8800", $8d
+	.byte $84,"BLOAD SAVE 8800", $8d
 	.byte 0
 	jsr j_overlay_entry
 	lda #music_main
