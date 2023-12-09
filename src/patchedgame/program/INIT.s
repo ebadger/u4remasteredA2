@@ -90,23 +90,9 @@ cout_stub = $1fff
 	sta zp_CSWL + 1
 	jsr DOS_hook_cout
 
-; copy $F000 to $FFFF to RAM
+; copy $E000 to $FFFF to RAM
 	bit hw_ROMIN ;read twice to
 	bit hw_ROMIN ;write-enable LC RAM bank2 ("Language Card")
-	lda #$00
-	sta key_buf_len
-	ldy #<rom_SHADOW_FXXX
-	sty ptr1
-	lda #>rom_SHADOW_FXXX
-	sta ptr1 + 1
-:	lda (ptr1),y
-	sta (ptr1),y
-	iny
-	bne :-
-	inc ptr1 + 1
-	bne :-
-
-; copy $E000 to $EFFF to RAM
 	lda #$00
 	sta key_buf_len
 	ldy #<rom_SHADOW_EXXX
@@ -119,6 +105,7 @@ cout_stub = $1fff
 	bne :-
 	inc ptr1 + 1
 	bne :-
+
 
 ; clear trainers
 	lda #$00

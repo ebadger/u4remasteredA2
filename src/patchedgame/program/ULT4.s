@@ -2380,7 +2380,7 @@ load_dungeon_map:
 	jsr j_primm_cout
 	.byte $84,"BLOAD DNG"
 @file_char_dungeon:
-	.byte "@,A$E800", $8d
+	.byte "@ B800", $8d
 	.byte 0
 	ldx #$00
 	txa
