@@ -6,8 +6,6 @@
 	.include "music_state.i"
 	.include "zp_music.i"
 
-
-
 	.segment "MB_INIT"
 
 	jmp init_mockingboards
@@ -50,7 +48,7 @@ select_bank2:
 
 relocate_MBSM:
 	; F000..F3F7 -> 0400..07F7
-	; F400..F7FF -> FD00..FFFF
+	; F400..F7FF -> AD00..AFFF
 
 	lda #<music_data
 	sta relocate_src

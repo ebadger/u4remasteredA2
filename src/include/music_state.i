@@ -21,8 +21,8 @@ music_mute = $04f2
 
 music_start = $0400
 mb_irq_handler = $0500
-music_update = $fd00
-music_data = $f000
+music_update = $Ad00
+music_data = $A000
 
 ; --- VALUES
 
