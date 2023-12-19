@@ -4,7 +4,7 @@
 
 	.include "mockingboard.i"
 	.include "zp_music.i"
-
+    .include "jump_subs.i"
 
 ; Only part of the driver will fit in high memory.
 ; The rest is sprinkled into the Apple II TEXT
@@ -41,8 +41,10 @@ mus_cmd_rts_pattern = $81
 mus_cmd_end_pattern = $82
 mus_cmd_poll_interval = $83
 
+TEMP_L = $CEEE
+TEMP_H = $CEEF
 
-clock_default = $429a  ;17050 CPU clocks ~= 1 video frame
+clock_default = $6682  ;26242 CPU clocks ~= 1 3R1C video frame
 
 ; FORMULA for number of CPU cycles per NTSC vertical blank interval:
 ;    clocks / v_blank = CPU clock cycles per second / NTSC fields per second
@@ -613,7 +615,7 @@ update_envelope:
 @set_level:
 	ldy chan_level_reg,x
 	lda chan_level + 1,x
-	and music_mute    ;ENHANCEMENT
+;	and music_mute    ;ENHANCEMENT
 	sta (next_values),y
 env_done:
 	dec chan_current
@@ -782,8 +784,14 @@ next_channel_cmd:
 	bne @done
 	jsr read_channel_byte
 	sta mb_irq_clock
+
 	jsr read_channel_byte
 	sta mb_irq_clock + 1
+    clc
+	
+    jsr j_adjust_irq_clock
+	sta mb_irq_clock+1
+
 @done:
 	jmp next_channel_data
 

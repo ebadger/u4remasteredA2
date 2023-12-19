@@ -3231,6 +3231,27 @@ gettile_dungeon:
 	lda (ptr1),y
 	rts
 
+adjust_irq_clock:
+
+mb_irq_clock = $45C
+TEMP_L = $CEEE
+TEMP_H = $CEEF
+	
+	lsr
+	sta TEMP_H
+    lda mb_irq_clock
+	lsr
+	sta TEMP_L
+
+    ; now add 1/2 of the value 
+	;clc
+	lda mb_irq_clock
+	adc TEMP_L
+	sta mb_irq_clock
+	lda mb_irq_clock+1
+	adc TEMP_H
+    rts
+	
 ; Junk from segment padding
 ;	.byte $30,$41,$30,$41,$30,$41,$30,$41
 ;	.byte $30,$41,$30,$41

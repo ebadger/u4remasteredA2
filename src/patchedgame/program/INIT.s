@@ -33,12 +33,6 @@ cout_stub = $1fff
 	jsr rom_HOME ;$FC58 HOME & CLEAR SCREEN (Destroys ACCUMULATOR & Y-REG)
 	jsr print_cout
 	.byte $8d
-	.byte $84,"NOMON I,O,C", $8d
-	.byte $84,"MAXFILES 1", $8d
-	.byte 0
-	jsr rom_HOME ;$FC58 HOME & CLEAR SCREEN (Destroys ACCUMULATOR & Y-REG)
-	jsr print_cout
-	.byte $8d
 	.byte $8d
 	.byte $8d
 	.byte $8d
@@ -53,7 +47,8 @@ cout_stub = $1fff
 	.byte $8d
 	.byte $8d
 	.byte "  COPYRIGHT 1985, ORIGIN SYSTEMS, INC.", $8d
-	.byte "  PORTED TO 3R1C 2023.", $8d
+	.byte $8d
+	.byte "          PORTED TO 3R1C 2023", $8d
 	.byte 0
 	jsr print_cout
 	.byte $84, "BLOAD SEL 0320", $8d

@@ -47,8 +47,8 @@ select_bank2:
 	rts
 
 relocate_MBSM:
-	; F000..F3F7 -> 0400..07F7
-	; F400..F7FF -> AD00..AFFF
+	; A000..A3F7 -> 0400..07F7
+	; A400..7FF -> AD00..AFFF
 
 	lda #<music_data
 	sta relocate_src
