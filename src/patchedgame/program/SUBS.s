@@ -3238,7 +3238,6 @@ mb_irq_clock = $45C
 TEMP_L = $CEEE
 TEMP_H = $CEEF
 
-    pha	
 	lsr
 	sta TEMP_H        ; 1/2 of mb_irq_clock+1
 	lda mb_irq_clock
@@ -3251,10 +3250,13 @@ TEMP_H = $CEEF
 	lda mb_irq_clock+1
 	adc TEMP_H
 	sta mb_irq_clock+1
-    pla
-	
+    bcs @max
     rts
-	
+@max:
+    lda #$FF
+	sta mb_irq_clock+1
+	sta mb_irq_clock
+	rts	
 ; Junk from segment padding
 ;	.byte $30,$41,$30,$41,$30,$41,$30,$41
 ;	.byte $30,$41,$30,$41
