@@ -51,4 +51,4 @@ j_gettile_towne = $0893
 j_gettile_dungeon = $0896
 j_math_sign = $0899
 j_switch_directory = $089c
-j_adjust_irq_clock = $1FE3
+j_adjust_irq_clock = $1FDC

@@ -2509,8 +2509,7 @@ file_write_temp_map:
 	lda #disk_britannia
 	jsr j_switch_directory
 	jsr j_primm_cout
-	.byte $84,"DEL TLST", $8d
-	.byte $84,"BSAVE TLST BE00 0100", $8d
+	.byte $84,"OWRITE TLST BE00 0100", $8d
 	.byte 0
 	rts
 
@@ -3220,16 +3219,11 @@ cmd_quit:
 	jsr music_ctl
 	lda #disk_britannia
 	jsr j_switch_directory
-	jsr j_primm_cout
-	.byte $84,"DEL LIST", $8d
-	.byte $84,"DEL ROST", $8d
-	.byte $84,"DEL PRTY", $8d
-	.byte 0
 
 	jsr j_primm_cout
-	.byte $84,"BSAVE LIST BE00 0100", $8d
-	.byte $84,"BSAVE ROST BC00 0200", $8d
-	.byte $84,"BSAVE PRTY 0000 0020", $8d
+	.byte $84,"OWRITE LIST BE00 0100", $8d
+	.byte $84,"OWRITE ROST BC00 0200", $8d
+	.byte $84,"OWRITE PRTY 0000 0020", $8d
 	.byte 0
 	lda zp_save_reg1    ;ENHANCEMENT: allow save in dungeon
 	jsr j_switch_directory  ;ENHANCEMENT

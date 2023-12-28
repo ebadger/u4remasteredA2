@@ -782,16 +782,14 @@ next_channel_cmd:
 @set_irq_rate:
 	cmp #mus_cmd_poll_interval
 	bne @done
+
 	jsr read_channel_byte
 	sta mb_irq_clock
 
 	jsr read_channel_byte
 	sta mb_irq_clock + 1
-    clc
-	
-    jsr j_adjust_irq_clock
-	sta mb_irq_clock+1
 
+    jsr j_adjust_irq_clock    
 @done:
 	jmp next_channel_data
 

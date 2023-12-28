@@ -2438,8 +2438,10 @@ moongate_ytab:
 	.byte $85,$66,$e0,$25,$13,$c2,$7e,$a7
 
 parent_dir:
+    pha
 	jsr j_primm_cout
 	.byte $84,"CD ..", $8d, 0
+    pla
 	rts
 
 directory:
@@ -2454,6 +2456,8 @@ switch_directory:
 	;disk_towne     = $03
 	;disk_dungeon   = $04
 	
+	jsr parent_dir
+
 	sta reqdisk
 	cmp #disk_dungeon
 	beq @underworld
@@ -2466,25 +2470,21 @@ switch_directory:
 	rts
 
 @underworld:
-    jsr parent_dir
  	jsr j_primm_cout
 	.byte $84,"CD UWORLD", $8d, 0
 	rts
 
 @towne:
-    jsr parent_dir
 	jsr j_primm_cout
 	.byte $84,"CD TOWNE", $8d, 0
 	rts
 
 @britannia:
-    jsr parent_dir
 	jsr j_primm_cout
 	.byte $84,"CD BRITANIA", $8d, 0
 	rts
 
 @program:
-    jsr parent_dir
 	jsr j_primm_cout
 	.byte $84,"CD PROGRAM", $8d, 0
 	rts
@@ -3234,22 +3234,25 @@ gettile_dungeon:
 adjust_irq_clock:
 
 mb_irq_clock = $45C
+	
 TEMP_L = $CEEE
 TEMP_H = $CEEF
-	
+
+    pha	
 	lsr
-	sta TEMP_H
-    lda mb_irq_clock
+	sta TEMP_H        ; 1/2 of mb_irq_clock+1
+	lda mb_irq_clock
 	lsr
-	sta TEMP_L
 
     ; now add 1/2 of the value 
-	;clc
-	lda mb_irq_clock
-	adc TEMP_L
+	clc
+	adc mb_irq_clock
 	sta mb_irq_clock
 	lda mb_irq_clock+1
 	adc TEMP_H
+	sta mb_irq_clock+1
+    pla
+	
     rts
 	
 ; Junk from segment padding
